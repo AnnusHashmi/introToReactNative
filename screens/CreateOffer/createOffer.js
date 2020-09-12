@@ -40,7 +40,7 @@ class CreateOffer extends Component{
                 <View style={{flex : 1 , paddingVertical : 10}}>
 
                     <View style={{alignItems : 'center', marginVertical : 20, marginTop : 50}}>
-                        <Text style={{fontSize : 24}}>Create an offer</Text>
+                        <Text style={{fontSize : 24 , fontWeight : 'bold'}}>Create a job offer</Text>
                     </View>
 
                     <View style={{ borderBottomWidth : 2}}>
@@ -90,8 +90,8 @@ class CreateOffer extends Component{
                             onChangeText={text => this.setState({timeRequired : text})}
                         />
                     </View>
-                    <Button onPress={this.sendJobOffer}>
-                        Post
+                    <Button mode="contained" onPress={this.sendJobOffer} color="#FF6347" style={{marginHorizontal : 15 , marginVertical : 10}}>
+                        Post Job 
                     </Button>
                 </View>
                 

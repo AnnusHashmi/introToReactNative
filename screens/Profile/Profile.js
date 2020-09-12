@@ -16,6 +16,7 @@ import { NavigationActions } from 'react-navigation'
 
 const Profile = (props) => {
     
+   
     const myCustomShare = async() => {
         const shareOptions = {
           message: 'Order your next meal from FoodFinder App. I\'ve already ordered more than 10 meals on it.',
@@ -31,13 +32,19 @@ const Profile = (props) => {
         }
       };
     // const navigation = useNavigation();
+   let userName = firebase.auth().currentUser.displayName;
+   let profilePic = firebase.auth().currentUser.photoURL;
+   let phoneNumber = firebase.auth().currentUser.phoneNumber;
+   let email = firebase.auth().currentUser.email;
+
     return(
+
         <ScrollView style={{marginTop : 30}}>
             <View style={styles.userInfoSection}>
                 <View style={{flexDirection: 'row', marginTop: 15}}>
                 <Avatar.Image 
                     source={{
-                    uri: 'https://firebasestorage.googleapis.com/v0/b/tg-app-b6d0a.appspot.com/o/pexels-taimoor-arain-1081606.jpg?alt=media&token=23561b73-f408-437e-b88e-b224c8f963c3',
+                    uri: profilePic,
                     }}
                     size={80}
                 />
@@ -45,8 +52,8 @@ const Profile = (props) => {
                     <Title style={[styles.title, {
                     marginTop:15,
                     marginBottom: 5,
-                    }]}>SM Sajideen Khan</Title>
-                    <Caption style={styles.caption}>@sm_Khan</Caption>
+                    }]}>{userName}</Title>
+                    <Caption style={styles.caption}> {email} </Caption>
                 </View>
         
                 </View>
@@ -60,7 +67,7 @@ const Profile = (props) => {
 
             <View style={styles.row}>
                  <Icon name="phone" color="#777777" size={20}/>
-                <Text style={{color:"#777777", marginLeft: 20}}>+91-900000009</Text>
+                  <Text style={{color:"#777777", marginLeft: 20}}>{phoneNumber}</Text>
             </View>
 
             <View style={styles.row}>
