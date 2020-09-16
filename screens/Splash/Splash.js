@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image ,Dimensions, TextInput, TouchableOpacity, ImageBackground } from 'react-native';
 
+const {width , height} = Dimensions.get('window')
 
 const SplashScreen = ({navigation}) => {
 
@@ -8,7 +9,7 @@ const SplashScreen = ({navigation}) => {
         navigation.replace('Login')
     } , 3000);
     return(
-        <View style={{...styles.backgroundStyle , ...styles.center , flex : 1 , alignItems : 'center'}}>
+        <View style={{...styles.backgroundStyle , ...styles.center , flex : 1 , width : width , height : height}}>
             <Image source={require("./logo.png")} />
         </View>
     )

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image ,Dimensions, TextInput, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
+import { View ,Text, StyleSheet, Image ,Dimensions, TextInput, TouchableOpacity, ImageBackground, ScrollView } from 'react-native';
 import { CheckBox } from "native-base";
 import signUp from './bg.jpg'
 import { FAB } from 'react-native-paper';
@@ -7,6 +7,7 @@ import * as firebase from  'firebase';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import {Picker} from '@react-native-community/picker';
 
 class GigForm extends Component{
 
@@ -119,12 +120,23 @@ class GigForm extends Component{
                     <TextInput style={{...styles.textInputNames,width:'45%', color : 'white'}} placeholder="First Name" underlineColorAndroid={"transparent"} value={this.state.firstName} onChangeText={(text) => this.setState({firstName: text})}/>
                     <TextInput style={{...styles.textInputNames,width:'45%', color : 'white'}} placeholder="Last Name" underlineColorAndroid={"transparent"} value={this.state.lastName} onChangeText={(text) => this.setState({lastName: text})} />
                 </View>
-                <TextInput style={{...styles.textInputNames,width: "100%" , color : 'white'}} placeholder="Tag Line" underlineColorAndroid={"transparent"} value={this.state.tagLine} onChangeText={(text) => this.setState({tagLine: text})} />
+                <TextInput style={{...styles.textInputNames,width: "100%" , color:'white'}} placeholder="Tag Line" underlineColorAndroid={"transparent"} value={this.state.tagLine} onChangeText={(text) => this.setState({tagLine: text})} />
                 <TextInput style={{...styles.textInputNames, color : 'white'}} placeholder="Email" underlineColorAndroid={"transparent"} value={this.state.email} onChangeText={(text) => this.setState({email: text})}/>
                 <TextInput style={{...styles.textInputNames , color : 'white'}} placeholder="Description" underlineColorAndroid={"transparent"} value={this.state.Description} multiline={true} onChangeText={(text) => this.setState({Description: text})}/>
 
                 <View style={{...styles.fRow,alignItems:'center',justifyContent:'space-between'}}>
-                    <TextInput style={{...styles.textInputNames,width:'60%' , color : 'white'}} placeholder="Type of Task" underlineColorAndroid={"transparent"} value={this.state.type} onChangeText={(text) => this.setState({type: text})}/>
+                  <Picker
+                    selectedValue={this.state.type}
+                    style={{height: 50, width: 100}}
+                    onValueChange={(itemValue, itemIndex) =>
+                      this.setState({type: itemValue})
+                    }>
+                    <Picker.Item label="Actor" value="actor" />
+                    <Picker.Item label="Comedian" value="comedian" />
+                    <Picker.Item label='Singer' value="singer" />
+                    <Picker.Item label='Dancer' value="dancer" />
+                  </Picker>
+
                     <TextInput style={{...styles.textInputNames,width:'30%' , color : 'white'}} placeholder="City" underlineColorAndroid={"transparent"} value={this.state.city} onChangeText={(text) => this.setState({city: text})} />
                 </View>
 

@@ -1,34 +1,46 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {View, SafeAreaView, StyleSheet, ScrollView} from 'react-native';
 import {
   Avatar,
   Title,
   Caption,
   Text,
-  TouchableRipple,
+  Card,
+  Paragraph,
   Button
 } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import firebase from 'firebase';
-import { ceil } from 'react-native-reanimated';
+import * as firebase from 'firebase';
 
 
-const Profile = (props) => {
-    
-    const myCustomShare = async() => {
-        const shareOptions = {
-          message: 'Order your next meal from FoodFinder App. I\'ve already ordered more than 10 meals on it.',
-          url: files.appLogo,
-          // urls: [files.image1, files.image2]
-        }
-    
-        try {
-          const ShareResponse = await Share.open(shareOptions);
-          console.log(JSON.stringify(ShareResponse));
-        } catch(error) {
-          console.log('Error => ', error);
-        }
-      };
+
+class Profile extends Component{
+
+    state = {
+      gigs : [],
+      
+    }
+  
+  
+  componentDidMount(){
+    firebase.firestore().collection("actorsgigs").onSnapshot((res) => {
+    var tempArr=[];
+        res.forEach((each) => {
+            console.log(each.ref.id,'eachhhhhh in actor profile')
+            // console.log("each: ",each);
+            tempArr.push({...each.data(),gigId:each.ref.id}); 
+        })
+        this.setState({gigs : tempArr})
+    })
+}
+
+  render(){
+      
+
+      const name = firebase.auth().currentUser.displayName;
+      const displayPicture = firebase.auth().currentUser.photoURL;
+      const email = firebase.auth().currentUser.email;
+      const phoneNumber = firebase.auth().currentUser.phoneNumber
 
     return(
         <SafeAreaView style={{marginTop : 30}}>
@@ -37,7 +49,7 @@ const Profile = (props) => {
                 <View style={{flexDirection: 'row', marginTop: 15}}>
                 <Avatar.Image 
                     source={{
-                    uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
+                    uri: displayPicture,
                     }}
                     size={80}
                 />
@@ -45,13 +57,13 @@ const Profile = (props) => {
                     <Title style={[styles.title, {
                     marginTop:15,
                     marginBottom: 5,
-                    }]}>Hafiz Sameed</Title>
+                    }]}>{name}</Title>
                     <Caption style={styles.caption}>@sam_labs</Caption>
                 </View>
         
                 </View>
             </View>
-
+                        
         <View style={styles.userInfoSection}>
             <View style={styles.row}>
                   <Icon name="google-maps" color="#777777" size={20}/> 
@@ -60,12 +72,12 @@ const Profile = (props) => {
 
             <View style={styles.row}>
                  <Icon name="phone" color="#777777" size={20}/>
-                <Text style={{color:"#777777", marginLeft: 20}}>+91-900000009</Text>
+                <Text style={{color:"#777777", marginLeft: 20}}>{phoneNumber}</Text>
             </View>
 
             <View style={styles.row}>
                  <Icon name="email" color="#777777" size={20}/> 
-                <Text style={{color:"#777777", marginLeft: 20}}>john_doe@email.com</Text>
+                <Text style={{color:"#777777", marginLeft: 20}}>{email}</Text>
             </View>
         </View>
 
@@ -93,36 +105,27 @@ const Profile = (props) => {
         </View>
 
         <View style={styles.menuWrapper}>
-            <TouchableRipple onPress={() => {}}>
-            <View style={styles.menuItem}>
-                <Icon name="heart-outline" color="#FF6347" size={25}/>
-                <Text style={styles.menuItemText}>Your Favorites</Text>
-            </View>
-            </TouchableRipple>
-            <TouchableRipple onPress={() => {}}>
-            <View style={styles.menuItem}>
-                <Icon name="cash" color="#FF6347" size={25}/>
-                <Text style={styles.menuItemText}>Payment</Text>
-              </View>
-            </TouchableRipple>
-            <TouchableRipple onPress={myCustomShare}>
-            <View style={styles.menuItem}>
-                <Icon name="share-outline" color="#FF6347" size={25}/>
-                <Text style={styles.menuItemText}>Tell Your Friends</Text>
-            </View>
-            </TouchableRipple>
-            <TouchableRipple onPress={() => {}}>
-            <View style={styles.menuItem}>
-                <Icon name="account-check-outline" color="#FF6347" size={25}/>
-                <Text style={styles.menuItemText}>Support</Text>
-            </View>
-            </TouchableRipple>
-            <TouchableRipple onPress={() => {}}>
-            <View style={styles.menuItem}>
-                <Icon name="settings-outline" color="#FF6347" size={25}/>
-                <Text style={styles.menuItemText}>Settings</Text>
-            </View>
-            </TouchableRipple>
+            
+            {
+              this.state.gigs.map((gig) => {
+                return(
+                  <View>
+                    <View>
+                        <Card>
+                          <Card.Content>
+                            <Title style={{textAlign : 'center'}}>{gig.tagLine}</Title>
+                            <Paragraph>Cost : ${gig.pricing}</Paragraph>
+                          </Card.Content>
+                        </Card>
+                      </View> :
+
+                      <View>
+                        <Text style={{fontSize : 24 , fontWeight : "bold" , textAlign : "center" , marginVertical : 20}}>No job posted yet</Text>
+                      </View>
+                  </View>  
+                )
+              })
+            }
 
             <View style={{marginHorizontal : 100, marginTop : 10}}>
               <Button icon="camera" mode="text" onPress={() => {firebase.auth().signOut().then(()=>{
@@ -142,6 +145,7 @@ const Profile = (props) => {
         </SafeAreaView>
         
     )
+  }
     
 }
 

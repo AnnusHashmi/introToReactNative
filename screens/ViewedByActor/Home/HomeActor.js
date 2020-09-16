@@ -40,10 +40,6 @@ class HomeActor extends Component{
         })
 
         this.setState({uid: firebase.auth().currentUser.uid})
-        console.log(firebase.auth().currentUser.uid,'current user');
-        console.log("user in homepage",this.props.user);
-
-        console.log("this is the uid in homepage: ", this.state.uid);
     }
 
     

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image ,Dimensions, TextInput , SafeAreaView, Platform, StatusBar, ScrollView, ImageBackground} from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
-import Slider from '../../component/HomeSlider/slider';
-import HomeCard from '../../component/HomeCards/homeCard';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as firebase from 'firebase'
 const {width , height} = Dimensions.get('window');
