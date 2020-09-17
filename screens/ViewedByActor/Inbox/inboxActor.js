@@ -26,7 +26,7 @@ class Inbox extends Component {
             description : '',
             price : '',
             time : '',
-            milestones : []
+            
         };
     }
 
@@ -309,7 +309,7 @@ class Inbox extends Component {
                                     {
                                         this.state.milestones.map((milestone) => {
                                             return(
-                                                <View>
+                                                <View style={{paddingTop : 10}}>
                                                     <Card>
                                                         <Card.Content>
                                                         <Title>{milestone.description}</Title>
@@ -347,15 +347,15 @@ class Inbox extends Component {
                                                 style={{margin : 10}}
                                                 />
                                                 <Button onPress={() => {
-                                                    const {milestones} = this.state;
+                                                   
 
-                                                    milestones.push({
+                                                    var milestones = {
                                                         description : this.state.description,
                                                         price : this.state.price,
                                                         time : this.state.time 
-                                                    });
+                                                    };
 
-                                                    this.setState({milestones});
+                                                    firebase.firestore().collection("chatrooms").doc(this.props.route.params.chatData.chatId).collection().add(milestones)
                                                     hideModal()
                                                 }}> 
                                                         Add
