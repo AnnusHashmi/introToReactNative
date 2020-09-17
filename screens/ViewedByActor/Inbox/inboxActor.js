@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Platform, Dimensions, Animated, TouchableOpacity, ScrollView, TextInput, Image } from 'react-native';
+import { View, Text, Platform, Dimensions, Animated, TouchableOpacity, ScrollView, Image } from 'react-native';
 import { Avatar, Button } from 'react-native-paper';
 import { Card, Title, Paragraph } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
-import * as firebase from 'firebase'
+import * as firebase from 'firebase';
+import { Modal, Portal, Provider , TextInput  } from 'react-native-paper';
 const { width } = Dimensions.get('window');
 
 class Inbox extends Component {
@@ -21,6 +22,11 @@ class Inbox extends Component {
             translateY: -1000,
             message:'',
             messages:[],
+            visible : false,
+            description : '',
+            price : '',
+            time : '',
+            milestones : []
         };
     }
 
@@ -107,6 +113,10 @@ class Inbox extends Component {
     }
 
     render() {
+
+        const showModal = () => this.setState({visible : true});
+      
+        const hideModal = () => this.setState({visible : false});
         let {
             xTabOne,
             xTabTwo,
@@ -117,7 +127,7 @@ class Inbox extends Component {
             translateY
         } = this.state;
 
-        const { chatData } = this.state;
+        const { chatData, text } = this.state;
         return (
             <View style={{ flex: 1 }}>
 
@@ -267,13 +277,6 @@ class Inbox extends Component {
                                         }
                                     })
                                 }
-                            {/* <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginVertical: 20 }}>
-                                <Icon name="chat" color="#FF6347" size={45} />
-                                <Text style={{ fontSize: 18 }}>Say Hi to { chatData && chatData.actorName}!</Text>
-                            </View> */}
-
-
-
 
                             <View style={{ flexDirection: 'row', padding: 10, backgroundColor: "white", marginHorizontal: 10, shadowColor: 'black', shadowOpacity: 0.2, elevation: 8, marginTop: Platform.OS == 'android' ? 300 : null }}>
                                 <Icon name="attachment" color="#FF6347" size={25} />
@@ -299,25 +302,73 @@ class Inbox extends Component {
                             <View style={{ flex: 1 }}>
                                 <View>
 
+                                    <Button style={{marginTop: 30}} onPress={showModal}>
+                                            Add milestones
+                                            </Button>
 
-                                    <Card>
-                                        <Icon2 name="laugh-squint" color="#FF6347" size={55} style={{ paddingLeft: 20, paddingVertical: 10 }} />
-                                        <Card.Content>
-                                            <Title>Comedy Hour</Title>
-                                            <Paragraph>I'll do Comedy for an hour with the best quality content amusing the crowd to the max
-                                    <Text style={{ paddingHorizontal: 20, fontSize: 16, fontWeight: "bold", paddingVertical: 5 }}>  $100 </Text>
-                                            </Paragraph>
-                                        </Card.Content>
-                                    </Card>
+                                    {
+                                        this.state.milestones.map((milestone) => {
+                                            return(
+                                                <View>
+                                                    <Card>
+                                                        <Card.Content>
+                                                        <Title>{milestone.description}</Title>
+                                                        <Paragraph>{milestone.price}</Paragraph>
+                                                        <Paragraph>{milestone.time}</Paragraph>
+                                                        </Card.Content>
+                                                    </Card>
+                                                </View>   
+                                            )
+                                        })
+                                    }
 
-                                    <Card style={{ marginVertical: 20 }}>
-                                        <Card.Content>
-                                            <Title>Order Attachments</Title>
-                                            <Icon name="attachment" color="#FF6347" size={45} />
-                                            <Paragraph>Please send the related attachments for your script</Paragraph>
-                                        </Card.Content>
-                                    </Card>
+                                    <View style={{padding : 150}}>
+                                        <Provider>
+                                            <Portal>
+                                                <Modal visible={this.state.visible} onDismiss={hideModal}>
+                                                <TextInput
+                                                label="Description"
+                                                value={text}
+                                                onChangeText={text => this.setState({description : text})}
+                                                style={{margin : 10}}
+                                                />
+
+                                                <TextInput
+                                                label="Price"
+                                                value={text}
+                                                onChangeText={text => this.setState({price : text})}
+                                                style={{margin : 10}}
+                                                />
+
+                                                <TextInput
+                                                label="Time Required"
+                                                value={text}
+                                                onChangeText={text => this.setState({time : text})}
+                                                style={{margin : 10}}
+                                                />
+                                                <Button onPress={() => {
+                                                    const {milestones} = this.state;
+
+                                                    milestones.push({
+                                                        description : this.state.description,
+                                                        price : this.state.price,
+                                                        time : this.state.time 
+                                                    });
+
+                                                    this.setState({milestones});
+                                                    hideModal()
+                                                }}> 
+                                                        Add
+                                                </Button>
+                                                </Modal>
+           
+
+                                            </Portal>
+                                        </Provider>
+                                    </View>
+                                    
                                 </View>
+                                
 
                             </View>
                         </Animated.View>
