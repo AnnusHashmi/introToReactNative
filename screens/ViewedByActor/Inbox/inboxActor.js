@@ -26,7 +26,7 @@ class Inbox extends Component {
             description : '',
             price : '',
             time : '',
-            
+            milestones : []
         };
     }
 
@@ -77,19 +77,11 @@ class Inbox extends Component {
         }
     }
 
-
-    componentWillMount() {
-        this.startHeaderHeight = 110;
-
-        if (Platform.OS === 'andriod') {
-            this.startHeaderHeight = 130 + StatusBar.currentHeight;
-        }
-    }
-
     componentDidMount() {
-        console.log(this.props.route.params, 'params')
+        
         this.setState({ chatData: this.props.route.params.chatData });
         this.getMessages();
+        this.getMilestone();
     }
     getMessages=()=>{
         var chatId = this.props.route.params.chatData.chatId;
@@ -99,8 +91,22 @@ class Inbox extends Component {
             snapshot.forEach((elem)=>{
                 messages.push({data:elem.data(),_id:elem.id});
             })
-            console.log(messages,'messages');
+            
             this.setState({messages});
+        })
+    }
+
+    getMilestone = () => {
+        var chatId = this.props.route.params.chatData.chatId;
+        firebase.firestore().collection('chatrooms').doc(chatId).collection('milestones').orderBy('timestamp')
+        .onSnapshot((snapshot)=>{
+            const tempMilestones = [];
+            snapshot.forEach((elem)=>{
+                tempMilestones.push({data:elem.data(),_id:elem.id});
+            })
+            console.log("these are the milestones : " , tempMilestones );
+            this.setState({milestones : tempMilestones});
+            
         })
     }
 
@@ -113,6 +119,8 @@ class Inbox extends Component {
     }
 
     render() {
+
+        var chatId = this.props.route.params.chatData.chatId;
 
         const showModal = () => this.setState({visible : true});
       
@@ -304,7 +312,13 @@ class Inbox extends Component {
 
                                     <Button style={{marginTop: 30}} onPress={showModal}>
                                             Add milestones
-                                            </Button>
+                                    </Button>
+
+                                    <View>
+                                        <Text>
+                                            Here are you goals
+                                        </Text>
+                                    </View>
 
                                     {
                                         this.state.milestones.map((milestone) => {
@@ -312,9 +326,9 @@ class Inbox extends Component {
                                                 <View style={{paddingTop : 10}}>
                                                     <Card>
                                                         <Card.Content>
-                                                        <Title>{milestone.description}</Title>
-                                                        <Paragraph>{milestone.price}</Paragraph>
-                                                        <Paragraph>{milestone.time}</Paragraph>
+                                                        <Title>{milestone.data.description}</Title>
+                                                        <Paragraph>{milestone.data.price}</Paragraph>
+                                                        <Paragraph>{milestone.data.time}</Paragraph>
                                                         </Card.Content>
                                                     </Card>
                                                 </View>   
@@ -355,7 +369,9 @@ class Inbox extends Component {
                                                         time : this.state.time 
                                                     };
 
-                                                    firebase.firestore().collection("chatrooms").doc(this.props.route.params.chatData.chatId).collection().add(milestones)
+                                                    firebase.firestore().collection("chatrooms").doc(chatId).collection("milestones").add(milestones).then(
+                                                        
+                                                    )
                                                     hideModal()
                                                 }}> 
                                                         Add

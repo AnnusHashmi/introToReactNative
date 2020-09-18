@@ -9,8 +9,8 @@ const SplashScreen = ({navigation}) => {
         navigation.replace('Login')
     } , 3000);
     return(
-        <View style={{...styles.backgroundStyle , ...styles.center , flex : 1 , width : width , height : height}}>
-            <Image source={require("./logo.png")} />
+        <View style={{flex : 1 , backgroundColor : "#f08a5d"}}>
+            <Image source={require("./logo.png")} style={{resizeMode : "contain" , width : "100%" , height : "100%"}} />
         </View>
     )
 }
@@ -18,26 +18,3 @@ const SplashScreen = ({navigation}) => {
 export default SplashScreen;
 
 
-const styles = StyleSheet.create({
-    container:{
-        width:Dimensions.get('window').width,
-        height:Dimensions.get('window').height
-    },
-    fRow:{
-        display:'flex',
-        flexDirection:'row'
-    },
-    fCol:{
-        display:'flex',
-        flexDirection:'column'
-    },
-    center : {
-        flex : 1,
-        justifyContent : 'center', 
-        paddingLeft : 40,
-        paddingRight : 40
-    },
-    backgroundStyle : {
-        backgroundColor : "#f08a5d"
-    }
-});
