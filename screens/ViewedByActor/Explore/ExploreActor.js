@@ -17,7 +17,7 @@ export default class  Explore extends Component {
         var uid = firebase.auth().currentUser.uid;
         // console.log(uid,'my uid');
             var temp = []
-            firebase.firestore().collection('actorsgigs').where("jobcreater","==",uid).onSnapshot( (res)=>{
+            firebase.firestore().collection('actorsgigs').where("jobcreater","==",uid).get().then( (res)=>{
                 res.forEach((each)=>{
                console.log(each.ref.id,'eachhh job')
                var id = each.ref.id;
@@ -43,6 +43,7 @@ export default class  Explore extends Component {
         }).then((data)=>{
             console.log(data,'data');
             // console.log(actorId,'actorId')
+            this.getData();
             this.createChatRoom(businessmanId,businessmanName);
         })
         .catch((e)=>{

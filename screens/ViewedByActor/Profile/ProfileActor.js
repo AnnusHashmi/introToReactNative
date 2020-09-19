@@ -23,7 +23,7 @@ class Profile extends Component{
   
   
   componentDidMount(){
-    firebase.firestore().collection("actorsgigs").onSnapshot((res) => {
+    firebase.firestore().collection("actorsgigs").get().then((res) => {
     var tempArr=[];
         res.forEach((each) => {
             console.log(each.ref.id,'eachhhhhh in actor profile')
@@ -95,45 +95,44 @@ class Profile extends Component{
           </View>
         </View>
 
-        <View style={styles.infoBoxWrapper}>
-          <View style={styles.adButton}>
-          <Button color='#FF6347' dark={true} mode="contained" onPress={() => console.log('Pressed')}>
-            NOTIFICATIONS
-          </Button>
-          </View>
-          
-        </View>
-
         <View style={styles.menuWrapper}>
             
             {
               this.state.gigs.map((gig) => {
-                return(
-                  <View>
+                if(firebase.auth().currentUser.uid === gig.jobcreater){
+                  return(
                     <View>
-                        <Card>
-                          <Card.Content>
-                            <Title style={{textAlign : 'center'}}>{gig.tagLine}</Title>
-                            <Paragraph>Cost : ${gig.pricing}</Paragraph>
-                          </Card.Content>
-                        </Card>
-                      </View> :
-
                       <View>
-                        <Text style={{fontSize : 24 , fontWeight : "bold" , textAlign : "center" , marginVertical : 20}}>No job posted yet</Text>
-                      </View>
-                  </View>  
-                )
+                          <Card>
+                            <Card.Content>
+                              <Title style={{textAlign : 'center'}}>{gig.tagLine}</Title>
+                              <Paragraph>Cost : ${gig.pricing}</Paragraph>
+                            </Card.Content>
+                          </Card>
+                        </View> 
+  
+                        <View>
+                          <Text style={{fontSize : 24 , fontWeight : "bold" , textAlign : "center" , marginVertical : 20}}>No job posted yet</Text>
+                        </View>
+                    </View>  
+                  )
+                }
+                else{
+                  <View>
+                    <Text> No gigs posted by you! </Text>
+                  </View>
+                }
+                
               })
             }
 
             <View style={{marginHorizontal : 100, marginTop : 10}}>
-              <Button icon="camera" mode="text" onPress={() => {firebase.auth().signOut().then(()=>{
+              <Button mode="text" onPress={() => {firebase.auth().signOut().then(()=>{
                     // console.log("this is the log: ",navigation);
                     props.signout();
                   }).catch(function(error) {
                     // An error happened.
-                    console.log(err,'err in signout');
+                    console.log(error,'err in signout');
                   });}}  
                 color="#FF6347">
                   <Text>Sign out</Text>

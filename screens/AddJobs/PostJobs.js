@@ -5,9 +5,8 @@ import signUp from './bg.jpg'
 import { FAB } from 'react-native-paper';
 import * as firebase from  'firebase';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
-import {Picker} from '@react-native-community/picker';
+
 
 class GigForm extends Component{
 
@@ -125,18 +124,7 @@ class GigForm extends Component{
                 <TextInput style={{...styles.textInputNames , color : 'white'}} placeholder="Description" underlineColorAndroid={"transparent"} value={this.state.Description} multiline={true} onChangeText={(text) => this.setState({Description: text})}/>
 
                 <View style={{...styles.fRow,alignItems:'center',justifyContent:'space-between'}}>
-                  <Picker
-                    selectedValue={this.state.type}
-                    style={{height: 50, width: 100}}
-                    onValueChange={(itemValue, itemIndex) =>
-                      this.setState({type: itemValue})
-                    }>
-                    <Picker.Item label="Actor" value="actor" />
-                    <Picker.Item label="Comedian" value="comedian" />
-                    <Picker.Item label='Singer' value="singer" />
-                    <Picker.Item label='Dancer' value="dancer" />
-                  </Picker>
-
+                    <TextInput style={{...styles.textInputNames,width:'60%' , color : 'white'}} placeholder="type" underlineColorAndroid={"transparent"} value={this.state.type} onChangeText={(text) => this.setState({type: text})} />
                     <TextInput style={{...styles.textInputNames,width:'30%' , color : 'white'}} placeholder="City" underlineColorAndroid={"transparent"} value={this.state.city} onChangeText={(text) => this.setState({city: text})} />
                 </View>
 

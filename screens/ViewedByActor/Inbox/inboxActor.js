@@ -98,14 +98,15 @@ class Inbox extends Component {
 
     getMilestone = () => {
         var chatId = this.props.route.params.chatData.chatId;
-        firebase.firestore().collection('chatrooms').doc(chatId).collection('milestones').orderBy('timestamp')
+        firebase.firestore().collection('chatrooms').doc(chatId).collection('milestones')
         .onSnapshot((snapshot)=>{
             const tempMilestones = [];
             snapshot.forEach((elem)=>{
                 tempMilestones.push({data:elem.data(),_id:elem.id});
             })
-            console.log("these are the milestones : " , tempMilestones );
+            console.log("these are the milestones: " , tempMilestones );
             this.setState({milestones : tempMilestones});
+            
             
         })
     }
@@ -286,11 +287,12 @@ class Inbox extends Component {
                                     })
                                 }
 
-                            <View style={{ flexDirection: 'row', padding: 10, backgroundColor: "white", marginHorizontal: 10, shadowColor: 'black', shadowOpacity: 0.2, elevation: 8, marginTop: Platform.OS == 'android' ? 300 : null }}>
-                                <Icon name="attachment" color="#FF6347" size={25} />
-                                <TextInput value={this.state.message} onChangeText={(txt)=>{this.setState({message:txt})}} placeholder="Message!" underlineColorAndroid='transparent' style={{ flex: 1, fontWeight: '700', backgroundColor: 'white', paddingHorizontal: 10 }} />
-                                <Button onPress={this.sendMessage}>Send</Button>
+                            <View style={{ flexDirection: 'row', paddingHorizontal: 10, backgroundColor: "white", marginHorizontal: 10, shadowColor: 'black', shadowOpacity: 0.2, elevation: 8, marginTop: Platform.OS == 'android' ? 100 : null}}>
+                               
+                                <TextInput value={this.state.message} onChangeText={(txt)=>{this.setState({message:txt})}} placeholder="Message!" underlineColorAndroid='transparent' style={{ flex: 1, fontWeight: '700', backgroundColor: 'white', paddingHorizontal: 5 }} />
+                                
                             </View>
+                            <Button onPress={this.sendMessage} color="#FF6347"> Send </Button>
                         </Animated.View>
 
                         <Animated.View
@@ -307,88 +309,92 @@ class Inbox extends Component {
                                 ]
                             }}
                         >
-                            <View style={{ flex: 1 }}>
-                                <View>
-
-                                    <Button style={{marginTop: 30}} onPress={showModal}>
-                                            Add milestones
-                                    </Button>
-
-                                    <View>
-                                        <Text>
-                                            Here are you goals
-                                        </Text>
-                                    </View>
-
-                                    {
-                                        this.state.milestones.map((milestone) => {
-                                            return(
-                                                <View style={{paddingTop : 10}}>
-                                                    <Card>
-                                                        <Card.Content>
-                                                        <Title>{milestone.data.description}</Title>
-                                                        <Paragraph>{milestone.data.price}</Paragraph>
-                                                        <Paragraph>{milestone.data.time}</Paragraph>
-                                                        </Card.Content>
-                                                    </Card>
-                                                </View>   
-                                            )
-                                        })
-                                    }
-
-                                    <View style={{padding : 150}}>
+                            
+                            <View>
+                                
+                                    <View style={{flex : 1 , paddingHorizontal : 150 }}>
+                                    
                                         <Provider>
+
                                             <Portal>
+                                            
                                                 <Modal visible={this.state.visible} onDismiss={hideModal}>
-                                                <TextInput
-                                                label="Description"
-                                                value={text}
-                                                onChangeText={text => this.setState({description : text})}
-                                                style={{margin : 10}}
-                                                />
+                                                    <ScrollView>        
+                                                    <TextInput
+                                                    label="Description"
+                                                    value={text}
+                                                    onChangeText={text => this.setState({description : text})}
+                                                    style={{margin : 10}}
+                                                    />
 
-                                                <TextInput
-                                                label="Price"
-                                                value={text}
-                                                onChangeText={text => this.setState({price : text})}
-                                                style={{margin : 10}}
-                                                />
+                                                    <TextInput
+                                                    label="Price"
+                                                    value={text}
+                                                    onChangeText={text => this.setState({price : text})}
+                                                    style={{margin : 10}}
+                                                    />
 
-                                                <TextInput
-                                                label="Time Required"
-                                                value={text}
-                                                onChangeText={text => this.setState({time : text})}
-                                                style={{margin : 10}}
-                                                />
-                                                <Button onPress={() => {
-                                                   
+                                                    <TextInput
+                                                    label="Time Required"
+                                                    value={text}
+                                                    onChangeText={text => this.setState({time : text})}
+                                                    style={{margin : 10}}
+                                                    />
+                                                    <Button mode="contained" style={{marginHorizontal : 30}} onPress={() => {
+                                                    
 
-                                                    var milestones = {
-                                                        description : this.state.description,
-                                                        price : this.state.price,
-                                                        time : this.state.time 
-                                                    };
+                                                        var milestones = {
+                                                            description : this.state.description,
+                                                            price : this.state.price,
+                                                            time : this.state.time 
+                                                        };
 
-                                                    firebase.firestore().collection("chatrooms").doc(chatId).collection("milestones").add(milestones).then(
-                                                        
-                                                    )
-                                                    hideModal()
-                                                }}> 
-                                                        Add
-                                                </Button>
+                                                        firebase.firestore().collection("chatrooms").doc(chatId).collection("milestones").add(milestones).then(
+                                                            
+                                                        )
+                                                        hideModal()
+                                                    }}> 
+                                                            Add
+                                                    </Button>
+
+                                                    </ScrollView>
                                                 </Modal>
-           
 
+                                                <Button style={{marginTop: 30}} onPress={showModal}>
+                                                        Add milestones
+                                                </Button>
+                                                
+                                                <View style={{zIndex : -1}}>
+                                                    {
+                                                        this.state.milestones.map((milestone) => {
+                                                            return(
+                                                                <View style={{paddingTop : 10}}>
+                                                                    <Card>
+                                                                        <Card.Content>
+                                                                        <Title><Text style={{fontWeight : 'bold'}}>Description: </Text>{milestone.data.description}</Title>
+                                                                        <Paragraph><Text style={{fontWeight : 'bold'}}>price:  </Text>{milestone.data.price}</Paragraph>
+                                                                        <Paragraph><Text style={{fontWeight : 'bold'}}>Time Required: </Text>{milestone.data.time}</Paragraph>
+                                                                        </Card.Content>
+                                                                    </Card>
+                                                                </View>   
+                                                            )
+                                                        })
+                                                    } 
+                                                </View>
+                                                
                                             </Portal>
                                         </Provider>
+
+                                        
                                     </View>
                                     
-                                </View>
-                                
-
+  
                             </View>
+                            
                         </Animated.View>
                     </ScrollView>
+
+                    
                 </View>
             </View>
         )
