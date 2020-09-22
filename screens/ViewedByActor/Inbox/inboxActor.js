@@ -6,7 +6,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/FontAwesome5';
 import * as firebase from 'firebase';
 import { Modal, Portal, Provider , TextInput  } from 'react-native-paper';
-const { width } = Dimensions.get('window');
+const { width  } = Dimensions.get('window');
+
 
 class Inbox extends Component {
 
@@ -29,6 +30,9 @@ class Inbox extends Component {
             milestones : []
         };
     }
+
+
+    
 
     handleSlide = type => {
         let {
@@ -120,6 +124,8 @@ class Inbox extends Component {
     }
 
     render() {
+        
+        
 
         var chatId = this.props.route.params.chatData.chatId;
 
@@ -254,7 +260,7 @@ class Inbox extends Component {
                         </TouchableOpacity>
                     </View>
 
-                    <ScrollView>
+               
                         <Animated.View
                             style={{
                                 justifyContent: "center",
@@ -271,23 +277,32 @@ class Inbox extends Component {
                                 })
                             }
                         >
+                            <View style={{height : 400 , width : width}}>
+                                 <ScrollView>
+                                    
+
+                                     
                                 {
                                     this.state.messages.map((e)=>{
                                         var myuid = firebase.auth().currentUser.uid;
                                         // console.log(firebase.auth().currentUser.uid,'my Uid')
                                         if(e.data.userId===firebase.auth().currentUser.uid){
                                             return <View style={{width:'100%',flex:1,flexDirection:'row-reverse',margin:5}}>
-                                                    <Text style={{backgroundColor:'#FFFFFF',color:'black',padding:10,borderRadius:10}}>{e.data.message}</Text>
+                                                    <Text style={{backgroundColor:'#FFFFFF',color:'black',padding:15,borderRadius:10}}>{e.data.message}</Text>
                                                 </View>
                                         }else{
                                             return <View style={{width:'100%',flex:1,flexDirection:'row',margin:5}}>
-                                                    <Text style={{backgroundColor:'#FF6347',color:'white',padding:10,borderRadius:10}}>{e.data.message}</Text>
+                                                    <Text style={{backgroundColor:'#FF6347',color:'white',padding:15,borderRadius:10}}>{e.data.message}</Text>
                                                 </View>
                                         }
                                     })
                                 }
+                                
+                                </ScrollView>
+                                </View>
 
-                            <View style={{ flexDirection: 'row', paddingHorizontal: 10, backgroundColor: "white", marginHorizontal: 10, shadowColor: 'black', shadowOpacity: 0.2, elevation: 8, marginTop: Platform.OS == 'android' ? 100 : null}}>
+
+                            <View style={{ flexDirection: 'row', paddingHorizontal: 10, backgroundColor: "white", marginHorizontal: 10, shadowColor: 'black', shadowOpacity: 0.2, elevation: 8, }}>
                                
                                 <TextInput value={this.state.message} onChangeText={(txt)=>{this.setState({message:txt})}} placeholder="Message!" underlineColorAndroid='transparent' style={{ flex: 1, fontWeight: '700', backgroundColor: 'white', paddingHorizontal: 5 }} />
                                 
@@ -311,89 +326,88 @@ class Inbox extends Component {
                         >
                             
                             <View>
-                                
-                                    <View style={{flex : 1 , paddingHorizontal : 150 }}>
+                            <View style={{flex : 1 , paddingHorizontal : 150 }}>
                                     
-                                        <Provider>
+                                    <Provider>
 
-                                            <Portal>
-                                            
-                                                <Modal visible={this.state.visible} onDismiss={hideModal}>
-                                                    <ScrollView>        
-                                                    <TextInput
-                                                    label="Description"
-                                                    value={text}
-                                                    onChangeText={text => this.setState({description : text})}
-                                                    style={{margin : 10}}
-                                                    />
-
-                                                    <TextInput
-                                                    label="Price"
-                                                    value={text}
-                                                    onChangeText={text => this.setState({price : text})}
-                                                    style={{margin : 10}}
-                                                    />
-
-                                                    <TextInput
-                                                    label="Time Required"
-                                                    value={text}
-                                                    onChangeText={text => this.setState({time : text})}
-                                                    style={{margin : 10}}
-                                                    />
-                                                    <Button mode="contained" style={{marginHorizontal : 30}} onPress={() => {
-                                                    
-
-                                                        var milestones = {
-                                                            description : this.state.description,
-                                                            price : this.state.price,
-                                                            time : this.state.time 
-                                                        };
-
-                                                        firebase.firestore().collection("chatrooms").doc(chatId).collection("milestones").add(milestones).then(
-                                                            
-                                                        )
-                                                        hideModal()
-                                                    }}> 
-                                                            Add
-                                                    </Button>
-
-                                                    </ScrollView>
-                                                </Modal>
-
-                                                <Button style={{marginTop: 30}} onPress={showModal}>
-                                                        Add milestones
-                                                </Button>
-                                                
-                                                <View style={{zIndex : -1}}>
-                                                    {
-                                                        this.state.milestones.map((milestone) => {
-                                                            return(
-                                                                <View style={{paddingTop : 10}}>
-                                                                    <Card>
-                                                                        <Card.Content>
-                                                                        <Title><Text style={{fontWeight : 'bold'}}>Description: </Text>{milestone.data.description}</Title>
-                                                                        <Paragraph><Text style={{fontWeight : 'bold'}}>price:  </Text>{milestone.data.price}</Paragraph>
-                                                                        <Paragraph><Text style={{fontWeight : 'bold'}}>Time Required: </Text>{milestone.data.time}</Paragraph>
-                                                                        </Card.Content>
-                                                                    </Card>
-                                                                </View>   
-                                                            )
-                                                        })
-                                                    } 
-                                                </View>
-                                                
-                                            </Portal>
-                                        </Provider>
-
+                                        <Portal>
                                         
-                                    </View>
+                                            <Modal visible={this.state.visible} onDismiss={hideModal}>
+                                                <ScrollView>        
+                                                <TextInput
+                                                label="Description"
+                                                value={text}
+                                                onChangeText={text => this.setState({description : text})}
+                                                style={{margin : 10}}
+                                                />
+
+                                                <TextInput
+                                                label="Price"
+                                                value={text}
+                                                onChangeText={text => this.setState({price : text})}
+                                                style={{margin : 10}}
+                                                />
+
+                                                <TextInput
+                                                label="Time Required"
+                                                value={text}
+                                                onChangeText={text => this.setState({time : text})}
+                                                style={{margin : 10}}
+                                                />
+                                                <Button mode="contained" style={{marginHorizontal : 30}} onPress={() => {
+                                                
+
+                                                    var milestones = {
+                                                        description : this.state.description,
+                                                        price : this.state.price,
+                                                        time : this.state.time 
+                                                    };
+
+                                                    firebase.firestore().collection("chatrooms").doc(chatId).collection("milestones").add(milestones).then(
+                                                        
+                                                    )
+                                                    hideModal()
+                                                }}> 
+                                                        Add
+                                                </Button>
+
+                                                </ScrollView>
+                                            </Modal>
+
+                                            <Button style={{marginTop: 30}} onPress={showModal}>
+                                                    Add milestones
+                                            </Button>
+                                            
+                                            <View style={{zIndex : -1}}>
+                                                {
+                                                    this.state.milestones.map((milestone) => {
+                                                        return(
+                                                            <View style={{paddingTop : 10}}>
+                                                                <Card>
+                                                                    <Card.Content>
+                                                                    <Title><Text style={{fontWeight : 'bold'}}>Description: </Text>{milestone.data.description}</Title>
+                                                                    <Paragraph><Text style={{fontWeight : 'bold'}}>price:  </Text>{milestone.data.price}</Paragraph>
+                                                                    <Paragraph><Text style={{fontWeight : 'bold'}}>Time Required: </Text>{milestone.data.time}</Paragraph>
+                                                                    <Button icon="card" mode="text" color='#FF6347' onPress={() => console.log('Pressed')}>
+                                                                        Create Payment
+                                                                    </Button>
+                                                                    </Card.Content>
+                                                                </Card>
+                                                            </View>   
+                                                        )
+                                                    })
+                                                } 
+                                            </View>
+                                            
+                                        </Portal>
+                                    </Provider>
+
                                     
-  
+                                </View>
+                               
                             </View>
                             
                         </Animated.View>
-                    </ScrollView>
-
                     
                 </View>
             </View>

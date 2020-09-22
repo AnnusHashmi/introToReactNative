@@ -128,12 +128,13 @@ class Profile extends Component{
 
           <View style={{marginHorizontal : 100, marginTop : 10}}>
             <Button icon="camera" mode="text" onPress={() => {
-              firebase.auth().signOut().then(function() {
-                    props.signout();
-                  console.log("this is the log: ",navigation);
+              
+              firebase.auth().signOut().then(() => {
+                console.log("SIGNOUT CALLED");
+                    this.props.signout();
                  
                 }).catch(function(error) {
-                  // An error happened.
+                  console.log("NOT WORKED SIGNOUT" , error);
                 });
               }}
               color="#FF6347">

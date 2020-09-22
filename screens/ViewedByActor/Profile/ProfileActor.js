@@ -129,7 +129,7 @@ class Profile extends Component{
             <View style={{marginHorizontal : 100, marginTop : 10}}>
               <Button mode="text" onPress={() => {firebase.auth().signOut().then(()=>{
                     // console.log("this is the log: ",navigation);
-                    props.signout();
+                    this.props.signout();
                   }).catch(function(error) {
                     // An error happened.
                     console.log(error,'err in signout');

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image ,Dimensions, TextInput , SafeAreaView, Platform, StatusBar, ScrollView, ImageBackground} from 'react-native';
-import { Card, Title, Paragraph } from 'react-native-paper';
+import { Card, Title, Paragraph , Chip } from 'react-native-paper';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import * as firebase from 'firebase'
 const {width , height} = Dimensions.get('window');
@@ -38,7 +38,9 @@ class Home extends Component{
                             <TextInput placeholder="Search your favroite actor!" underlineColorAndroid='transparent' style={{flex : 1 , fontWeight : '700', backgroundColor : 'white'}} />
 
                         </View>
+
                     </View>
+                    
 
                     <ScrollView scrollEventThrottle={16} showsHorizontalScrollIndicator={false}>
                         <View >
