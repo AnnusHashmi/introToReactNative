@@ -8,6 +8,17 @@ import * as firebase from 'firebase';
 import { Modal, Portal, Provider , TextInput  } from 'react-native-paper';
 const { width  } = Dimensions.get('window');
 
+var stripe = require('stripe-client')('pk_test_gqNrlDbWOF1mcoIKk5efAeJT005pdjrS5O');
+
+var information = {
+  card: {
+    number: '4242424242424242',
+    exp_month: '02',
+    exp_year: '21',
+    cvc: '999',
+    name: 'Billy Joe'
+  }
+}
 
 class Inbox extends Component {
 
@@ -32,7 +43,11 @@ class Inbox extends Component {
     }
 
 
-    
+    async onPayment() {
+        var card = await stripe.createToken(information);
+        var token = card.id;
+        alert(token)
+      }
 
     handleSlide = type => {
         let {
@@ -388,7 +403,7 @@ class Inbox extends Component {
                                                                     <Title><Text style={{fontWeight : 'bold'}}>Description: </Text>{milestone.data.description}</Title>
                                                                     <Paragraph><Text style={{fontWeight : 'bold'}}>price:  </Text>{milestone.data.price}</Paragraph>
                                                                     <Paragraph><Text style={{fontWeight : 'bold'}}>Time Required: </Text>{milestone.data.time}</Paragraph>
-                                                                    <Button icon="card" mode="text" color='#FF6347' onPress={() => console.log('Pressed')}>
+                                                                    <Button icon="card" mode="text" color='#FF6347' onPress={() => this.onPayment()}>
                                                                         Create Payment
                                                                     </Button>
                                                                     </Card.Content>

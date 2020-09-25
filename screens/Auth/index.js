@@ -183,7 +183,7 @@ class Auth extends Component {
           googleUser.accessToken
         );
         // Sign in with credential from the Google user.
-        firebase.auth().signInAndRetrieveDataWithCredential(credential)
+        firebase.auth().signInWithCredential(credential)
           .then((data) => {
             console.log("thennn", data.user.uid)
             console.log(this.state.type, 'typeeee');
@@ -257,32 +257,21 @@ class Auth extends Component {
   //const {type , token} = await Expo.Facebook.loginWithPermissionsAsync('1252920121726022', permission : ['pubiclprofile'])
   //}
 
-  logInWithFacebook = async () => {
-    try {
-      await Facebook.initializeAsync('1252920121726022');
-      const {
-        type,
-        token,
-        expires,
-        permissions,
-        declinedPermissions,
-      } = await Facebook.logInWithReadPermissionsAsync({
-        permissions: ['public_profile'],
-      });
-      if (type === 'success') {
-        // Get the user's name using Facebook's Graph API
-        const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`);
+  async loginWithFacebook() {
 
-      } else {
-        // type === 'cancel'
-      }
-    } catch ({ message }) {
-      alert(`Facebook Login Error: ${message}`);
+    //ENTER YOUR APP ID 
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('1252920121726022', { permissions: ['public_profile'] })
+
+    if (type == 'success') {
+
+      const credential = firebase.auth.FacebookAuthProvider.credential(token)
+
+      firebase.auth().signInWithCredential(credential).catch((error) => {
+        console.log(error)
+      })
     }
   }
   render() {
-
-    const navigation = this.props.navigation;
     return (
       <View style={{ flex: 1, backgroundColor: 'white', justifyContent: 'flex-end' }}>
 
@@ -375,7 +364,7 @@ class Auth extends Component {
                 Sign In
               </Button>
               
-              <Button mode="contained" onPress={() => this.logInWithFacebook()} style={styles.signIn} icon="facebook" color='#3b5998'>
+              <Button mode="contained" onPress={() => this.loginWithFacebook()} style={styles.signIn} icon="facebook" color='#3b5998'>
                 Sign In
               </Button>
             </View>
